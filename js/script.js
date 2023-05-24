@@ -1,18 +1,56 @@
 // PÁGINA DE JUEGOS
 
-/* resultados y rondas */
-let partidasGanadasJugador = 0;
-let partidasGanadasComputadora = 0;
-let i = 1
 
-// PIEDRA, PAPEL O TIJERA
+class JuegosOnline {
+    constructor() {
+        this.juegos = ["Piedra, Papel o Tijera", "Ahorcado"];
+        this.eleccionJuego = 0;
+        this.nombreJugador = "";
+    }
 
-let juegoPPT = (nombreJugador) => {
+    juegosDisponibles() {
+        let mensaje = "Bienvenid@!\nEstos son los juegos disponibles:\n";
+        this.juegos.forEach((juego, posicion) => {
+            mensaje += `${posicion + 1}. ${juego}\n`;
+        });
+        alert(mensaje);
+    }
 
-    const nombreComputadora = "Computadora";
 
-    for (i; ; i++) {
-        let eleccionJugador = prompt(`${nombreJugador}, elige alguna de estas opciones: \n\n-Piedra \n-Papel \n-Tijera`).toLowerCase();
+    bienvenidaJuego() {
+        this.eleccionJuego = parseInt(prompt("Elige el juego: \n\n1. Piedra, Papel o Tijera  \n2. Ahorcado"));
+
+        while (this.eleccionJuego !== 1 && this.eleccionJuego !== 2) {
+            this.eleccionJuego = parseInt(prompt("Elige una opción válida:\n\n1. Piedra, Papel o Tijera  \n2. Ahorcado"));
+        }
+
+        this.iniciarJuego(this.eleccionJuego);
+    }
+
+    iniciarJuego(eleccionJuego) {
+        alert(`Haz elegido jugar ${this.juegos[eleccionJuego - 1]} \n¡Suerte!`);
+
+        this.nombreJugador = prompt("¿Cómo es tu nombre?");
+        while (this.nombreJugador === "") {
+            this.nombreJugador = prompt("Por favor, ingresa un nombre válido");
+        }
+
+        if (eleccionJuego === 1) {
+            this.juegoPPT(this.nombreJugador);
+        } else if (eleccionJuego === 2) {
+            this.juegoA(this.nombreJugador);
+        }
+    }
+
+    juegoPPT(nombreJugador) {
+        let partidasGanadasJugador = 0;
+        let partidasGanadasComputadora = 0;
+        let i = 1
+
+        const nombreComputadora = "Computadora";
+
+        for (i; ; i++) {
+            let eleccionJugador = prompt(`${nombreJugador}, elige alguna de estas opciones: \n\n-Piedra \n-Papel \n-Tijera`).toLowerCase();
         
 
         while (eleccionJugador !== "piedra" && eleccionJugador !== "papel" && eleccionJugador !== "tijera") {
@@ -45,9 +83,9 @@ let juegoPPT = (nombreJugador) => {
         }
 
         alert(`${resultado} esta ronda!`);
-            alert(`Ronda ${i + 1} \n\n
-                ${nombreJugador}: ${partidasGanadasJugador} \n
-                ${nombreComputadora}: ${partidasGanadasComputadora}`);
+        alert(`Ronda ${i + 1} \n\n
+            ${nombreJugador}: ${partidasGanadasJugador} \n
+            ${nombreComputadora}: ${partidasGanadasComputadora}`);
 
     }
     
@@ -57,104 +95,76 @@ let juegoPPT = (nombreJugador) => {
     } else if (partidasGanadasJugador < partidasGanadasComputadora) {
         alert(`La ${nombreComputadora} ganó el juego en ${i} rondas!!`);
     };
-
-}
-
-// AHORCADO
-
-let juegoA = (nombreJugador) => {
-
-    let palabras = ["javascript", "codigo", "desarrolloweb", "programacion", "computadora"];
-
-    let ronda = {
-        palabra: "",
-        ocultarPalabra: "",
-        intentos: 10,
-        letrasJugadas: [],
-        estado: "jugando"
     }
 
-    let adivinarPalabra = () => {
-        let posicion = Math.floor(Math.random() * palabras.length);
-        ronda.palabra = palabras[posicion];
-        ronda.ocultarPalabra = "_ ".repeat(ronda.palabra.length).trim();
-    }
+    juegoA(nombreJugador) {
 
-    let actualizarPalabra = (letra) => {
-        let nuevaPalabra = "";
-        for (let i = 0; i < ronda.palabra.length; i++) {
-          if (ronda.palabra[i] === letra) {
-            nuevaPalabra += letra;
-          } else {
-            nuevaPalabra += ronda.ocultarPalabra[i];
-          }
+        let palabras = ["javascript", "codigo", "desarrolloweb", "programacion", "computadora"];
+
+        let ronda = {
+            palabra: "",
+            ocultarPalabra: "",
+            intentos: 10,
+            letrasJugadas: [],
+            estado: "jugando"
         }
-        ronda.ocultarPalabra = nuevaPalabra;
-      }
-
-    let iniciar = () => {
-        let palabra = adivinarPalabra();
-
-        while (ronda.intentos > 0 && ronda.ocultarPalabra.includes("_")) {
-            alert(`Palabra: ${ronda.ocultarPalabra}\nIntentos restantes: ${ronda.intentos}`);
-
-            let letra = prompt("Ingresa una letra:").toLowerCase();
-
-            while (!letra.match(/^[a-z]$/) || ronda.letrasJugadas.includes(letra)) {
-                letra = prompt("Ingresa una letra válida sin repetirla").toLowerCase();
+    
+        let adivinarPalabra = () => {
+            let posicion = Math.floor(Math.random() * palabras.length);
+            ronda.palabra = palabras[posicion];
+            ronda.ocultarPalabra = "_ ".repeat(ronda.palabra.length).trim();
+        }
+    
+        let actualizarPalabra = (letra) => {
+            let nuevaPalabra = "";
+            for (let i = 0; i < ronda.palabra.length; i++) {
+                if (ronda.palabra[i] === letra) {
+                    nuevaPalabra += letra;
+                } else {
+                    nuevaPalabra += ronda.ocultarPalabra[i];
+                }
             }
+            ronda.ocultarPalabra = nuevaPalabra;
+        }
+    
+        let iniciar = () => {
 
-            ronda.letrasJugadas.push(letra);
-  
-            if (ronda.palabra.includes(letra)) {
-            actualizarPalabra(letra);
+            adivinarPalabra();
+            
+            while (ronda.intentos > 0 && ronda.ocultarPalabra.includes("_")) {
+                alert(`Palabra: ${ronda.ocultarPalabra}\nIntentos restantes: ${ronda.intentos}`);
+    
+                let letra = prompt("Ingresa una letra:").toLowerCase();
+    
+                while (!letra.match(/^[a-z]$/) || ronda.letrasJugadas.includes(letra)) {
+                    letra = prompt("Ingresa una letra válida sin repetirla").toLowerCase();
+                }
+    
+                ronda.letrasJugadas.push(letra);
+    
+                if (ronda.palabra.includes(letra)) {
+                actualizarPalabra(letra);
+                } else {
+                ronda.intentos--;
+                }
+            }
+    
+            if (ronda.intentos > 0) {
+                ronda.estado = "ganado";
+                alert(`¡Ganaste ${nombreJugador}! Has adivinado la palabra "${ronda.palabra}"`);
             } else {
-            ronda.intentos--;
+                ronda.estado = "perdido";
+                alert(`¡Perdiste ${nombreJugador}! La palabra correcta era "${ronda.palabra}"`);
             }
         }
 
-        if (ronda.intentos > 0) {
-            ronda.estado = "ganado";
-            alert(`¡Ganaste ${nombreJugador}! Has adivinado la palabra "${ronda.palabra}"`);
-          } else {
-            ronda.estado = "perdido";
-            alert(`¡Perdiste ${nombreJugador}! La palabra correcta era "${ronda.palabra}"`);
-          }
-    }
-
-    iniciar();
-}
-
-
-// INTRODUCCION
-
-let juegos = ["Piedra, Papel o Tijera", "Ahorcado"]
-
-
-let eleccionJuego = parseInt(prompt("Bienvenid@! \nElige alguno de los siguientes juegos: \n\n1. Piedra, Papel o Tijera  \n2. Ahorcado"));
-
-while (eleccionJuego !== 1 && eleccionJuego !== 2) {
-    eleccionJuego = parseInt(prompt("Elige una opción válida:\n\n1. Piedra, Papel o Tijera  \n2. Ahorcado")); 
-}
-
-
-let bienvenidaJuego = (eleccionJuego) => {
-    alert(`Haz elegido jugar ${juegos[eleccionJuego - 1]} \n¡Suerte!`);
-
-    let nombreJugador = "";
-    while (nombreJugador === "") {
-        nombreJugador = prompt("¿Cómo es tu nombre?");
-        if (nombreJugador === "") {
-            alert("Por favor, ingresa un nombre válido");
-        }
-    }
-
-    if (eleccionJuego === 1){
-        juegoPPT(nombreJugador);
-    } else if (eleccionJuego === 2){
-        juegoA(nombreJugador);
+        iniciar();
     }
 }
 
-bienvenidaJuego(eleccionJuego);
+
+const juegosOnline = new JuegosOnline();
+juegosOnline.juegosDisponibles();
+juegosOnline.bienvenidaJuego();
+
 
